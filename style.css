@@ -1,0 +1,41 @@
+/* Styles go here */
+.MainCtrl{
+  
+}
+
+.influxGrid{
+}
+
+.modal-lg{
+	width : 1200px;
+}
+
+.leftSide{
+	float : left;
+	width : 30%;
+}
+
+.rightSide{
+	float : left;
+	width : 70%;
+}
+
+footer{
+	clear: left;
+}
+
+div.block{
+  overflow:hidden;
+}
+
+div.block label{
+  width : 220px;
+  display : block;
+  float : left;
+  text-align : left;
+}
+
+div.block .input{
+  margin-left : 4px;
+  float : left;
+}

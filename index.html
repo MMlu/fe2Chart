@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html ng-app="influx">
+
+<head>
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+	<link rel="styleSheet" href="http://ui-grid.info/release/ui-grid.min.css" />
+	<link rel="styleSheet" href="style.css" />
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-touch.js"></script>
+
+	<script src="http://ui-grid.info/release/ui-grid.js"></script>
+	<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.4.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+	<script src="control.js"></script>
+
+	<script src="chartCapitalExposure.js"></script>
+	<script src="chartAcountInfo.js"></script>
+	<script src="chartWatchList.js"></script>
+	<script src="chartHoldingList.js"></script>
+	<script src="positionHistoryChart.js"></script>
+	<script src="chart.js"></script>
+
+</head>
+
+<body >
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand">Tmesis Trading Framework</a>
+			</div>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#/"><i class="fa fa-home"></i> AccountInfo</a></li>
+				<li><a href="#WatchList"><i class="fa fa-shield"></i> WatchList</a></li>
+				<li><a href="#HoldingList"><i class="fa fa-comment"></i> HoldingList</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div id="main">
+		<div ng-view></div>
+	</div>
+</body>
+
+<footer class="text-center">
+	<p>by Bryan, Tmesis Corporation</p>
+</footer>
+
+<script type="text/ng-template" id="pAccountInfo.html">
+  	<div class="jumbotron text-center">
+		<h1>{{ message }}</h1>
+	</div>
+
+	<div ng-controller="capitalExposureChart as vm" class="leftSide">
+		<div id="serviceGrid2"
+			ui-grid-move-columns 
+			ui-grid-selection
+			ui-grid-resize-columns
+			
+			ui-grid-pinning
+			ui-grid-exporter 
+			ui-grid-auto-resize
+			
+			ui-grid-edit
+			ui-grid="vm.serviceGrid2" class="influxGrid">
+		</div>
+	</div>
+	
+	<div ng-controller="acountInfoChart as vm" class="rightSide">
+		<div id="serviceGrid" 
+			ui-grid-move-columns 
+			ui-grid-selection
+			ui-grid-resize-columns
+			
+			ui-grid-pinning
+			ui-grid-exporter 
+			ui-grid-auto-resize
+			
+			ui-grid-edit
+			ui-grid="vm.serviceGrid" class="influxGrid">
+		</div>
+	</div>
+
+</script>
+
+<script type="text/ng-template" id="pWatchList.html">
+  	<div class="jumbotron text-center">
+		<h1>{{ message }}</h1>
+	</div>
+
+	<div ng-controller="watchListChart as vm">
+		<div>
+			<button type="button" id="addRow" class="btn btn-success" ng-click="addRow()">Add</button>
+		</div>
+		<br />
+		
+		<div id="serviceGrid" 
+			ui-grid-move-columns 
+			ui-grid-selection
+			ui-grid-resize-columns
+			
+			ui-grid-pinning
+			ui-grid-exporter 
+			ui-grid-auto-resize
+			
+			ui-grid-edit
+			ui-grid="vm.serviceGrid" class="influxGrid">
+		</div>
+	</div>
+</script>
+
+<script type="text/ng-template" id="pHoldingList.html">
+  	<div class="jumbotron text-center">
+		<h1>{{ message }}</h1>
+	</div>
+
+	<div ng-controller="holdingListChart as vm">
+		<div>
+			<button type="button" id="addRow" class="btn btn-success" ng-click="addRow()">Add</button>
+		</div>
+		<br />
+		
+		<div id="serviceGrid" 
+			ui-grid-move-columns 
+			ui-grid-selection
+			ui-grid-resize-columns
+			
+			ui-grid-pinning
+			ui-grid-exporter 
+			ui-grid-auto-resize
+			
+			ui-grid-edit
+			ui-grid="vm.serviceGrid" class="influxGrid">
+		</div>
+	</div>
+</script>
+
+<script type="text/ng-template" id="watchList-edit.html">
+	<div>
+		<div class="modal-header">
+			<h3 class="modal-title">Edit</h3>
+		</div>
+		<div class="modal-body">
+			<form name"serviceForm">
+				<div class="block">
+					<label>Id</label>
+					<input class="input" type="text" disabled value="{{vm.entity.id}}" />
+				</div>
+				<div class="block">
+					<label>Account</label>
+					<input class="input" type="text" ng-model="vm.entity.Account"/>
+				</div>
+				<div class="block">
+					<label>Instrument Type</label>
+					<input class="input" type="text" ng-model="vm.entity.InstrumentType"/>
+				</div>
+				<div class="block">
+					<label>Strategy</label>
+					<input class="input" type="text" ng-model="vm.entity.Strategy"/>
+				</div>
+				<div class="block">
+					<label>Capital Exposure</label>
+					<input class="input" type="text" ng-model="vm.entity.CapitalExposure"/>
+				</div>
+			</form>
+		</div>
+		<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="vm.save()">Save</button>
+		<button class="btn btn-primary" ng-click="vm.remove()">Delete</button>
+		<button class="btn btn-primary" ng-click="$close()">Cancel</button>
+	</div>
+</div>
+</script>
+
+<script type="text/ng-template" id="holdingList-edit.html">
+	<div class="modal-body" id="hlEditBody">
+		<div>
+			<div class="modal-header">
+				<h3 class="modal-title">Edit</h3>
+			</div>
+			<form name"serviceForm">
+				<div class="block">
+					<label>Id</label>
+					<input class="input" type="text" disabled value="{{vm.entity.id}}" />
+				</div>
+				<div class="block">
+					<label>Strategy</label>
+					<input class="input" type="text" ng-model="vm.entity.strategy"/>
+				</div>
+				<div class="block">
+					<label>Capital Exposure</label>
+					<input class="input" type="text" ng-model="vm.entity.capitalExposure"/>
+				</div>
+				<div class="block">
+					<label>Current Available Margin</label>
+					<input class="input" type="text" ng-model="vm.entity.availableMargin"/>
+				</div>
+				<div class="block">
+					<label>Total Closed Profit</label>
+					<input class="input" type="text" ng-model="vm.entity.TotalClosedProfit"/>
+				</div>
+				<div class="block">
+					<label>StrategyMetaData</label>
+					<input class="input" type="text" ng-model="vm.entity.strategyMetaData"/>
+				</div>
+			</form>
+		</div>
+		<div>
+			<div class="modal-header">
+				<h3 class="modal-title">History</h3>
+			</div>
+			<div ng-controller="positionHistoryChart as vm">
+				<div id="serviceGrid" 
+					ui-grid-move-columns 
+					ui-grid-selection
+					ui-grid-resize-columns
+					
+					ui-grid-pinning
+					ui-grid-exporter 
+					ui-grid-auto-resize
+					
+					ui-grid-edit
+					ui-grid="vm.serviceGrid" class="influxGrid">
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-danger" ng-click="vm.stopStrategy()">Stop Strategy</button>
+			<button class="btn btn-primary" ng-click="vm.save()">Update Strategy</button>
+			<button class="btn btn-primary" ng-click="$close()">Cancel</button>
+		</div>
+	</div>
+</script>
+
+</html>
